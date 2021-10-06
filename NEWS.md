@@ -1,3 +1,17 @@
+# sendgridr 0.3.3
+
+# sendgridr 0.3.2
+
+* Fix url on description file.
+
+# sendgridr 0.3.1
+
+* Update Docs Return value for dynamic_template_data() and template_id() function.
+
+# sendgridr 0.3.0
+
+* Add dynamic_template_data() and template_id() function with @aedobbyn and tested @CurtisPetersen.
+
 # sendgridr 0.2.4
 
 * Add Docs for cran.
