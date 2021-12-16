@@ -1,4 +1,20 @@
-# sendgridr 0.3.3
+# sendgridr 0.4.2
+
+# sendgridr 0.4.1
+
+* Add embed_rmd() function using emayili package(0.7.0).
+
+# sendgridr 0.4.0
+
+* Refactor Dynamic Template related functions.
+* Add dynamic_Template() function.
+* Add template_id validation and force options to bypass.
+* Remove unused dependency packages.
+
+# sendgridr 0.3.4
+
+* Fix print function for sg_mail class.
+* Remove unused dependency packages.
 
 # sendgridr 0.3.2
 

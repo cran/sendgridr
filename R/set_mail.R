@@ -1,9 +1,12 @@
 
+
+
 #' Set mail class for Sendgrid
 #'
 #' New mail class for sendgrid.
 #'
 #' @return sg_mail class.
+#' @importFrom jsonlite unbox
 #' @examples
 #' mail()
 #' @export
@@ -12,7 +15,8 @@ mail <- function() {
     from = "",
     personalizations = list(),
     subject = "",
-    content = list()
+    content = list(type = "text/plain",
+      value = "")
   )
   class(res) <- c("sg_mail", "list")
   return(res)
@@ -29,9 +33,11 @@ address <- function(locate) {
     loc_group <- sg_mail$personalizations[[locate]]
 
     if (name == "") {
-      mail_list <- list(email = unbox(email))
+      mail_list <- list(email = jsonlite::unbox(email))
     } else {
-      mail_list <- list(email = unbox(email), name = unbox(name))
+      mail_list <-
+        list(email = jsonlite::unbox(email),
+          name = jsonlite::unbox(name))
     }
 
     loc_group[[length(loc_group) + 1]] <- mail_list
@@ -94,42 +100,12 @@ from <- function(sg_mail, email, name = "") {
     stop("please check email address.")
   }
   mail_list <-
-    list(
-      email = jsonlite::unbox(email),
-      name = jsonlite::unbox(name)
-    )
+    list(email = jsonlite::unbox(email),
+      name = jsonlite::unbox(name))
   sg_mail[["from"]] <- mail_list
   return(sg_mail)
 }
 
-#' Add dynamic template data
-#'
-#' \code{template_id} must be included for this data to be applied.
-#'
-#' @param sg_mail (required) mail object from package
-#' @param lst A key-value list for template data. (See \url{https://docs.sendgrid.com/ui/sending-email/how-to-send-an-email-with-dynamic-transactional-templates})
-#'
-#' @return sg_mail class with template data for dynamic transactional templates
-#' @export
-#'
-#' @examples
-#' data_lst <-
-#'   list(
-#'     first_name = "Amanda",
-#'     link = "foo"
-#'   )
-#'
-#' mail() %>%
-#'   dynamic_template_data(data_lst)
-dynamic_template_data <- function(sg_mail, lst) {
-  if (!sg_mail_chk(sg_mail)) {
-    stop("please check sg_mail class")
-  }
-
-  sg_mail$personalizations[["dynamic_template_data"]] <- lst
-
-  return(sg_mail)
-}
 
 #' subject
 #'
@@ -141,25 +117,11 @@ dynamic_template_data <- function(sg_mail, lst) {
 #' mail() %>%
 #'   subject("mrchypark@gmail.com")
 subject <- function(sg_mail, subject) {
-  sg_mail[["subject"]] <- jsonlite::unbox(subject)
-  return(sg_mail)
-}
+  if (!sg_mail_chk(sg_mail)) {
+    stop("please check sg_mail class")
+  }
 
-#' template id
-#'
-#' Create dynamic templates at \url{https://mc.sendgrid.com/dynamic-templates}
-#'
-#' @param sg_mail (required) mail object from package
-#' @param template_id (required) template_id
-#'
-#' @return sg_mail class with template id.
-#' @export
-#'
-#' @examples
-#' mail() %>%
-#'   template_id("foo")
-template_id <- function(sg_mail, template_id) {
-  sg_mail[["template_id"]] <- jsonlite::unbox(template_id)
+  sg_mail[["subject"]] <- jsonlite::unbox(subject)
   return(sg_mail)
 }
 
@@ -177,27 +139,21 @@ body <- function(sg_mail, body, type = "text/html") {
   if (!sg_mail_chk(sg_mail)) {
     stop("please check sg_mail class")
   }
-  body <- data.frame(
-    type = type,
+  body <- data.frame(type = type,
     value = read(body),
-    stringsAsFactors = F
-  )
+    stringsAsFactors = F)
   sg_mail[["content"]] <- body
   return(sg_mail)
 }
 
 #' @importFrom fs is_file
-#' @importFrom stringr str_sub
 read <- function(content) {
-  if (is.character(content)) {
-    chk <- stringr::str_sub(content, 1, 10000)
-  } else {
+  if (!is.character(content)) {
     stop("content can contain characters only")
   }
-  if (fs::is_file(chk)) {
+  if (fs::is_file(content)) {
     content <- readLines(content)
     content <- paste0(content, collapse = "\n")
-    # content <- juicer::juice(content)
   }
   content <- as.character(content)
   return(content)
@@ -208,6 +164,7 @@ read <- function(content) {
 #' @param sg_mail (required)mail object from package
 #' @param path (required)file path to attach
 #' @param name file name. default is path's file name
+#' @param content_id content id. default is Null.
 #' @importFrom base64enc base64encode
 #' @importFrom fs is_file
 #' @importFrom dplyr filter
@@ -218,8 +175,12 @@ read <- function(content) {
 #'   attachments("sendgridr.docx")
 #' }
 #' @export
-attachments <- function(sg_mail, path, name) {
-  . <- Extension <- NULL
+attachments <- function(sg_mail, path, name, content_id) {
+  . <- Name <- NULL
+
+  if (!sg_mail_chk(sg_mail)) {
+    stop("please check sg_mail class")
+  }
 
   if (!fs::is_file(path)) {
     stop("Please make sure it is the correct file path.")
@@ -228,8 +189,8 @@ attachments <- function(sg_mail, path, name) {
   exten <- strsplit(path, ".", fixed = T)[[1]]
   exten <- tolower(exten[length(exten)])
   mime_types %>%
-    dplyr::filter(grepl(paste0("^.", exten, "$"), Extension)) %>%
-    .$`MIME Type` -> type
+    dplyr::filter(grepl(paste0("^", exten, "$"), Name)) %>%
+    .$Template -> type
 
   if (identical(type, character(0))) {
     type <- "application/octet-stream"
@@ -244,23 +205,31 @@ attachments <- function(sg_mail, path, name) {
   }
 
   attached <- sg_mail[["attachments"]]
-  if (is.null(attached)) {
+  if (missing(content_id)) {
     attachments <-
-      data.frame(content, filename, type, stringsAsFactors = F)
+      data.frame(content, filename, type,
+        stringsAsFactors = F)
+  } else {
+    disposition <- "inline"
+    attachments <-
+      data.frame(content,
+        filename,
+        type,
+        disposition,
+        content_id,
+        stringsAsFactors = F)
+  }
+  if (is.null(attached)) {
     sg_mail[["attachments"]] <- attachments
   } else {
-    attachments <-
-      data.frame(content, filename, type, stringsAsFactors = F)
     sg_mail[["attachments"]] <- rbind(attached, attachments)
   }
   return(sg_mail)
 }
 
 email_chk <- function(email) {
-  grepl(
-    "^([a-z0-9_\\.-]+)@([0-9a-z\\.-]+)\\.([a-z\\.]{2,6})$",
-    email
-  )
+  grepl("^([a-z0-9_\\.-]+)@([0-9a-z\\.-]+)\\.([a-z\\.]{2,6})$",
+    email)
 }
 
 sg_mail_chk <- function(sg_mail) {
