@@ -78,7 +78,7 @@ sendproject1
 #> v   attach : (optional)
 ```
 
-![](https://user-images.githubusercontent.com/6179259/46489370-23453380-c840-11e8-9ca6-7758a92c6e92.png)
+![](https://user-images.githubusercontent.com/6179259/146438934-6a462118-9691-4fcf-8c1d-895b63fa6c9e.png)
 
 to, from, subject, body are required. cc, bcc, attachments are optional.
 
@@ -87,6 +87,7 @@ to, from, subject, body are required. cc, bcc, attachments are optional.
 to, cc, bcc, attachments functions are able to set multi values.
 
 ``` r
+library(sendgridr)
 mail() %>% 
   from("example1@mail.com", "toexam@mail.com") %>% 
   to("toexam1@mail.com", "1 exam") %>% 
@@ -105,14 +106,10 @@ mail() %>%
 ## TODO
 
 -   [ ] write the documents nicly
--   [x] define sg\_mail class
--   [x] set print function for sg\_mail class
--   [x] content type set ‘html’
--   [x] build attachments function
 -   [ ] support multi-mail list with one function
 -   [ ] write the vignette
 -   [ ] set tests
--   [ ] rebuild html file possible to view in gmail
+-   [x] rebuild html file possible to view in gmail
 
 ## Code of Conduct
 
@@ -131,6 +128,10 @@ key](https://allcontributors.org/docs/en/emoji-key)):
 <!-- markdownlint-disable -->
 <table>
 <tr>
+<td align="center">
+<a href="http://web-r.org"><img src="https://avatars.githubusercontent.com/u/7410607?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Keon-Woong
+Moon</b></sub></a><br /><a href="https://github.com/mrchypark/sendgridr/issues?q=author%3Acardiomoon" title="Bug reports">🐛</a>
+</td>
 <td align="center">
 <a href="http://www.zarathu.com"><img src="https://avatars.githubusercontent.com/u/33089958?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jinseob
 Kim</b></sub></a><br /><a href="#ideas-jinseob2kim" title="Ideas, Planning, & Feedback">🤔</a>
@@ -155,6 +156,8 @@ Dobbyn</b></sub></a><br /><a href="https://github.com/mrchypark/sendgridr/commit
 <a href="https://guidotti.dev"><img src="https://avatars.githubusercontent.com/u/24247667?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Emanuele
 Guidotti</b></sub></a><br /><a href="https://github.com/mrchypark/sendgridr/commits?author=eguidotti" title="Documentation">📖</a>
 <a href="https://github.com/mrchypark/sendgridr/commits?author=eguidotti" title="Tests">⚠️</a>
+<a href="https://github.com/mrchypark/sendgridr/issues?q=author%3Aeguidotti" title="Bug reports">🐛</a>
+<a href="https://github.com/mrchypark/sendgridr/commits?author=eguidotti" title="Code">💻</a>
 </td>
 </tr>
 </table>
