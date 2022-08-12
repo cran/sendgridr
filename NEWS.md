@@ -1,3 +1,15 @@
+# sendgridr 0.5.1
+
+* Rebuild document with roxygen2 7.2.1
+
+# sendgridr 0.5.0
+
+* api key manage with keyring pacakge.
+
+# sendgridr 0.4.4
+
+* Fix test for Windows.
+
 # sendgridr 0.4.3
 
 * Remove fs package for check file exist and lint other deps.
