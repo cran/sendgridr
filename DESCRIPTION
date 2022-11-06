@@ -1,6 +1,6 @@
 Package: sendgridr
 Title: Mail Sender Using 'Sendgrid' Service
-Version: 0.5.1
+Version: 0.6.1
 Authors@R: person(given = "Chanyub",
            family = "Park",
            role = c("aut","cre"),
@@ -18,8 +18,8 @@ RoxygenNote: 7.2.1
 Depends: R (>= 3.4)
 Suggests: covr, testthat
 NeedsCompilation: no
-Packaged: 2022-08-12 15:55:23 UTC; mrchypark
+Packaged: 2022-11-06 18:51:23 UTC; mrchypark
 Author: Chanyub Park [aut, cre] (<https://orcid.org/0000-0001-6474-2570>)
 Maintainer: Chanyub Park <mrchypark@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-08-12 16:10:02 UTC
+Date/Publication: 2022-11-06 19:00:02 UTC

@@ -4,7 +4,7 @@
 #'
 #' @param sg_mail (required) mail object from package
 #' @param template_id (required) template_id start "d-" and 32-length only digit and lower case alphabet like "d-4ad23ad40a0e47d0a0232b85f24ca5c2"
-#' @param template_data A key-value list for template data. (See \url{https://docs.sendgrid.com/ui/sending-email/how-to-send-an-email-with-dynamic-transactional-templates})
+#' @param template_data A key-value list for template data. (See \url{https://docs.sendgrid.com/ui/sending-email/how-to-send-an-email-with-dynamic-templates})
 #' @param force pass template_id validation. default is FALSE.
 #' @return sg_mail class with dynamic template
 #' @importFrom jsonlite unbox
@@ -73,7 +73,7 @@ template_id <- function(sg_mail, template_id, force = FALSE) {
 #' \code{template_id} must be included for this data to be applied.
 #'
 #' @param sg_mail (required) mail object from package
-#' @param data A key-value list for template data. (See \url{https://docs.sendgrid.com/ui/sending-email/how-to-send-an-email-with-dynamic-transactional-templates})
+#' @param data A key-value list for template data. (See \url{https://docs.sendgrid.com/ui/sending-email/how-to-send-an-email-with-dynamic-templates})
 #'
 #' @return sg_mail class with template data for dynamic transactional templates
 #' @export
